@@ -1,10 +1,7 @@
 import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import IntroScreen from "@/components/IntroScreen";
 import Navigation from "@/components/Navigation";
-import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import PortfolioSection from "@/components/PortfolioSection";
-import PressSection from "@/components/PressSection";
 import FooterSection from "@/components/FooterSection";
 
 const Index = () => {
@@ -24,13 +21,17 @@ const Index = () => {
         }}
       >
         <Navigation />
-        <main>
-          <HeroSection />
-          <AboutSection />
-          <PortfolioSection />
-          <PressSection />
-          <FooterSection />
+        <main className="flex items-center justify-center min-h-screen">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="text-hero-title text-4xl md:text-6xl lg:text-7xl text-center"
+          >
+            안녕하세요 박용진입니다
+          </motion.h1>
         </main>
+        <FooterSection />
       </div>
     </div>
   );
