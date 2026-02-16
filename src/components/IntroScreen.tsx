@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import backgroundImg from "@/assets/background.jpg";
 
 const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [phase, setPhase] = useState<"logo" | "exit">("logo");
@@ -15,13 +16,18 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <AnimatePresence>
-      {phase !== "exit" ? null : null}
       <motion.div
         key="intro"
         className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
         initial={{ opacity: 1 }}
         animate={phase === "exit" ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
+        style={{ 
+          backgroundImage: `url(${backgroundImg})`, 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
       >
         {/* Subtle top line */}
         <motion.div
@@ -32,24 +38,17 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           style={{ top: "35%" }}
         />
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-section-number text-xs md:text-sm mb-6"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          당신의 모든 상상은 현실이 됩니다
-        </motion.p>
-
         {/* Main logo text */}
         <motion.h1
-          className="font-display text-4xl md:text-6xl lg:text-7xl tracking-wider text-muted-foreground/60 font-light"
+          className="text-hero-title text-4xl md:text-6xl lg:text-7xl text-center font-light"
           initial={{ opacity: 0, letterSpacing: "0.5em" }}
-          animate={{ opacity: 1, letterSpacing: "0.15em" }}
+          animate={phase === "exit" 
+            ? { opacity: 0, letterSpacing: "0.15em" } 
+            : { opacity: 1, letterSpacing: "0.15em" }
+          }
           transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
         >
-          박용진
+          안녕하세요 박용진입니다
         </motion.h1>
 
         {/* Bottom line */}
@@ -59,16 +58,6 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           animate={{ height: 40 }}
           transition={{ duration: 0.6, delay: 1.4, ease: "easeOut" }}
         />
-
-        {/* CTA hint */}
-        <motion.p
-          className="absolute bottom-12 text-muted-foreground/30 text-xs tracking-[0.3em]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.8 }}
-        >
-          YONGJIN PARK
-        </motion.p>
       </motion.div>
     </AnimatePresence>
   );

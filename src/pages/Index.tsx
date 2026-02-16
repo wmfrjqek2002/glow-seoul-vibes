@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import IntroScreen from "@/components/IntroScreen";
 import Navigation from "@/components/Navigation";
 import FooterSection from "@/components/FooterSection";
+import HistorySection from "@/components/HistorySection";
+import NavigationMenuSection from "@/components/NavigationMenuSection";
+import backgroundImg from "@/assets/background.jpg";
 
 const Index = () => {
   const [introComplete, setIntroComplete] = useState(false);
@@ -12,7 +15,16 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div 
+      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-background relative"
+      style={{ 
+        backgroundImage: `url(${backgroundImg})`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center -230px',
+        backgroundAttachment: 'fixed',
+        paddingTop: '80px'
+      }}
+    >
       {!introComplete && <IntroScreen onComplete={handleIntroComplete} />}
       <div
         style={{
@@ -21,17 +33,11 @@ const Index = () => {
         }}
       >
         <Navigation />
-        <main className="flex items-center justify-center min-h-screen">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="text-hero-title text-4xl md:text-6xl lg:text-7xl text-center"
-          >
-            안녕하세요 박용진입니다
-          </motion.h1>
+        <main className="flex items-center justify-center h-screen snap-start pt-20">
         </main>
         <FooterSection />
+        <HistorySection />
+        <NavigationMenuSection />
       </div>
     </div>
   );
