@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
+
+const navItems = [
+  { label: "박용진은?", path: "/about" },
+  { label: "비전과 목표", path: "/vision" },
+  { label: "보도", path: "/press" },
+  { label: "미디어", path: "/media" },
+  { label: "방명록", path: "/guestbook" },
+];
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -19,20 +29,21 @@ const Navigation = () => {
         scrolled ? "bg-background/90 backdrop-blur-md" : ""
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-6">
-        <a href="#" className="font-display text-xl text-foreground tracking-wider font-light">
-          STUDIO MARU
-        </a>
-        <div className="hidden md:flex items-center gap-10">
-          <a href="#portfolio" className="text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-            PORTFOLIO
-          </a>
-          <a href="#" className="text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-            ABOUT
-          </a>
-          <a href="#" className="text-xs tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-            CONTACT
-          </a>
+      <div className="max-w-7xl mx-auto flex items-center justify-center px-6 md:px-12 py-6">
+        <div className="flex items-center gap-8 md:gap-12">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`text-xs tracking-[0.15em] transition-colors ${
+                location.pathname === item.path
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
       </div>
     </motion.nav>

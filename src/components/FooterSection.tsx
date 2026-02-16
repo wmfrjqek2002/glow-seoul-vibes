@@ -5,7 +5,7 @@ const FooterSection = () => {
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <h2 className="font-display text-3xl text-foreground font-light mb-4">
-              STUDIO MARU
+              박용진
             </h2>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
               공간의 본질을 이해하고, 브랜드의 이야기를 담아
