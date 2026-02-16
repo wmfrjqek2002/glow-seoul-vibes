@@ -26,7 +26,7 @@ const HeroSection = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-hero-title text-5xl md:text-7xl lg:text-8xl mb-8"
         >
-          STUDIO MARU
+          박용진
         </motion.h1>
 
         <motion.p

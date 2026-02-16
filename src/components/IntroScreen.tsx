@@ -49,7 +49,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           animate={{ opacity: 1, letterSpacing: "0.15em" }}
           transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
         >
-          STUDIO MARU
+          박용진
         </motion.h1>
 
         {/* Bottom line */}
@@ -67,7 +67,7 @@ const IntroScreen = ({ onComplete }: { onComplete: () => void }) => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.8 }}
         >
-          SPACE BRANDING STUDIO
+          YONGJIN PARK
         </motion.p>
       </motion.div>
     </AnimatePresence>
