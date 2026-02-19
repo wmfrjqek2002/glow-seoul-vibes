@@ -1,151 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navigation from "@/components/Navigation";
-
-interface PressItem {
-  id: number;
-  title: string;
-  publisher: string;
-  date: string;
-  image?: string;
-}
-
-// 샘플 데이터 (실제로는 API에서 가져올 데이터)
-const allPressItems: PressItem[] = [
-  {
-    id: 1,
-    title: "박용진 의원, 국회의원 선거 당선",
-    publisher: "MBC",
-    date: "2024.04.10",
-  },
-  {
-    id: 2,
-    title: "민주주의 실현을 위한 노력",
-    publisher: "중앙일보",
-    date: "2024.03.15",
-  },
-  {
-    id: 3,
-    title: "경제 발전 정책 제안",
-    publisher: "조선일보",
-    date: "2024.03.08",
-  },
-  {
-    id: 4,
-    title: "사회 통합을 위한 포용적 정책",
-    publisher: "한겨레",
-    date: "2024.02.20",
-  },
-  {
-    id: 5,
-    title: "미래 세대를 위한 지속 가능한 정책",
-    publisher: "동아일보",
-    date: "2024.02.10",
-  },
-  {
-    id: 6,
-    title: "국정감사에서의 활발한 활동",
-    publisher: "연합뉴스",
-    date: "2024.01.25",
-  },
-  {
-    id: 7,
-    title: "지역 발전을 위한 특별법 제정",
-    publisher: "매일경제",
-    date: "2024.01.15",
-  },
-  {
-    id: 8,
-    title: "청년 정책 포럼 개최",
-    publisher: "SBS",
-    date: "2024.01.05",
-  },
-  {
-    id: 9,
-    title: "환경 보호 정책 발표",
-    publisher: "YTN",
-    date: "2023.12.20",
-  },
-  {
-    id: 10,
-    title: "디지털 뉴딜 정책 제안",
-    publisher: "KBS",
-    date: "2023.12.10",
-  },
-  {
-    id: 11,
-    title: "복지 정책 확대 발표",
-    publisher: "MBC",
-    date: "2023.11.25",
-  },
-  {
-    id: 12,
-    title: "교육 개혁 정책 제안",
-    publisher: "중앙일보",
-    date: "2023.11.15",
-  },
-  {
-    id: 13,
-    title: "주거 안정 대책 발표",
-    publisher: "조선일보",
-    date: "2023.11.05",
-  },
-  {
-    id: 14,
-    title: "의료 접근성 개선 정책",
-    publisher: "한겨레",
-    date: "2023.10.25",
-  },
-  {
-    id: 15,
-    title: "교통 인프라 확충",
-    publisher: "동아일보",
-    date: "2023.10.15",
-  },
-  {
-    id: 16,
-    title: "문화 예술 지원 정책",
-    publisher: "연합뉴스",
-    date: "2023.10.05",
-  },
-  {
-    id: 17,
-    title: "스마트시티 구축 계획",
-    publisher: "매일경제",
-    date: "2023.09.25",
-  },
-  {
-    id: 18,
-    title: "노인 복지 정책 강화",
-    publisher: "SBS",
-    date: "2023.09.15",
-  },
-  {
-    id: 19,
-    title: "청년 창업 지원 확대",
-    publisher: "YTN",
-    date: "2023.09.05",
-  },
-  {
-    id: 20,
-    title: "환경 친화적 도시 조성",
-    publisher: "KBS",
-    date: "2023.08.25",
-  },
-];
+import { getPressItems, type PressItem } from "@/lib/store";
 
 const ITEMS_PER_PAGE = 10;
 const FEATURED_COUNT = 2;
 
 const Press = () => {
+  const [allPressItems, setAllPressItems] = useState<PressItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(allPressItems.length / ITEMS_PER_PAGE);
-  
+
+  useEffect(() => {
+    const loadPressItems = async () => {
+      const items = await getPressItems();
+      setAllPressItems(items);
+    };
+    loadPressItems();
+  }, []);
+
+  const totalPages = Math.ceil(allPressItems.length / ITEMS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentItems = allPressItems.slice(startIndex, endIndex);
-  
+
   const featuredItems = currentItems.slice(0, FEATURED_COUNT);
   const regularItems = currentItems.slice(FEATURED_COUNT);
 
@@ -183,9 +61,11 @@ const Press = () => {
             >
               {/* Featured Section - 2x2 Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
-                {featuredItems.map((item, index) => (
+                {featuredItems.map((item, index) => {
+                  const Wrapper = item.link ? "a" : "div";
+                  return (
+                  <Wrapper key={item.id} {...(item.link ? { href: item.link, target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <motion.div
-                    key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -222,14 +102,18 @@ const Press = () => {
                       <p className="text-white/70 text-xs">{item.date}</p>
                     </div>
                   </motion.div>
-                ))}
+                  </Wrapper>
+                  );
+                })}
               </div>
 
               {/* Regular Grid - 4 columns */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {regularItems.map((item, index) => (
+                {regularItems.map((item, index) => {
+                  const Wrapper = item.link ? "a" : "div";
+                  return (
+                  <Wrapper key={item.id} {...(item.link ? { href: item.link, target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <motion.div
-                    key={item.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: (index + FEATURED_COUNT) * 0.05 }}
@@ -266,7 +150,9 @@ const Press = () => {
                       <p className="text-white/70 text-xs">{item.date}</p>
                     </div>
                   </motion.div>
-                ))}
+                  </Wrapper>
+                  );
+                })}
               </div>
             </motion.div>
           </AnimatePresence>

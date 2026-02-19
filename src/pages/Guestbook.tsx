@@ -7,56 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-
-interface GuestbookMessage {
-  id: number;
-  name: string;
-  message: string;
-  createdAt: string;
-}
-
-// 임시 샘플 데이터 (Supabase 연결 후 제거)
-const sampleMessages: GuestbookMessage[] = [
-  {
-    id: 1,
-    name: "김민수",
-    message: "항상 시민을 위해 노력해주셔서 감사합니다. 더 좋은 대한민국을 만들어가시길 응원합니다!",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    name: "이영희",
-    message: "민주주의의 가치를 지키기 위한 노력이 보입니다. 응원합니다!",
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: 3,
-    name: "박준호",
-    message: "청년 정책에 많은 관심을 가져주셔서 감사합니다. 앞으로도 좋은 정책 부탁드립니다.",
-    createdAt: new Date(Date.now() - 172800000).toISOString(),
-  },
-  {
-    id: 4,
-    name: "최지은",
-    message: "강북 지역 발전을 위해 노력해주시는 모습이 보기 좋습니다. 계속 응원하겠습니다!",
-    createdAt: new Date(Date.now() - 259200000).toISOString(),
-  },
-  {
-    id: 5,
-    name: "정태영",
-    message: "환경 보호 정책 발표 감사합니다. 지속 가능한 미래를 위해 함께 노력하겠습니다.",
-    createdAt: new Date(Date.now() - 345600000).toISOString(),
-  },
-  {
-    id: 6,
-    name: "한소영",
-    message: "항상 시민의 목소리에 귀기울여주셔서 감사합니다. 더 좋은 정책 기대하겠습니다!",
-    createdAt: new Date(Date.now() - 432000000).toISOString(),
-  },
-];
+import { getGuestbookMessages, addGuestbookMessage, type GuestbookMessage } from "@/lib/store";
 
 const Guestbook = () => {
-  const [messages, setMessages] = useState<GuestbookMessage[]>(sampleMessages);
+  const [messages, setMessages] = useState<GuestbookMessage[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -65,17 +19,12 @@ const Guestbook = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Supabase에서 메시지 불러오기 (Supabase 연결 후 활성화)
   useEffect(() => {
-    // const loadMessages = async () => {
-    //   if (!supabase) return;
-    //   const { data, error } = await supabase
-    //     .from('guestbook')
-    //     .select('*')
-    //     .order('created_at', { ascending: false });
-    //   if (data) setMessages(data);
-    // };
-    // loadMessages();
+    const loadMessages = async () => {
+      const msgs = await getGuestbookMessages();
+      setMessages(msgs);
+    };
+    loadMessages();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,30 +32,17 @@ const Guestbook = () => {
     setIsSubmitting(true);
 
     try {
-      // Supabase에 메시지 저장 (Supabase 연결 후 활성화)
-      // if (supabase) {
-      //   const { error } = await supabase
-      //     .from('guestbook')
-      //     .insert([{
-      //       name: formData.name,
-      //       message: formData.message,
-      //       password: formData.password, // 실제로는 해시화해서 저장
-      //     }]);
-      //   if (error) throw error;
-      // }
-
-      // 임시: 로컬 상태에 추가
-      const newMessage: GuestbookMessage = {
-        id: messages.length + 1,
+      const newMessage = await addGuestbookMessage({
         name: formData.name,
         message: formData.message,
         createdAt: new Date().toISOString(),
-      };
-      setMessages([newMessage, ...messages]);
-
-      // 폼 초기화 및 모달 닫기
-      setFormData({ name: "", password: "", message: "" });
-      setIsModalOpen(false);
+      });
+      
+      if (newMessage) {
+        setMessages([newMessage, ...messages]);
+        setFormData({ name: "", password: "", message: "" });
+        setIsModalOpen(false);
+      }
     } catch (error) {
       console.error("Error submitting message:", error);
     } finally {

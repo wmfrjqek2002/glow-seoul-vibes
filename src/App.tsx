@@ -8,6 +8,7 @@ import Vision from "./pages/Vision";
 import Press from "./pages/Press";
 import Media from "./pages/Media";
 import Guestbook from "./pages/Guestbook";
+import Manager from "./pages/Manager";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/press" element={<Press />} />
           <Route path="/media" element={<Media />} />
           <Route path="/guestbook" element={<Guestbook />} />
+          <Route path="/manager" element={<Manager />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
