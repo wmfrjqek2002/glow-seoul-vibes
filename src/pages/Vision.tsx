@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
+import vision1 from "@/assets/vision1.jpg";
+import vision2 from "@/assets/vision2.jpg";
+import vision3 from "@/assets/vision3.jpg";
+import vision4 from "@/assets/vision4.jpg";
+import vision5 from "@/assets/vision5.jpg";
+
+const AUTO_SCROLL_INTERVAL = 5000; // 5초마다 자동 넘김
+
+const visionImages = [vision1, vision2, vision3, vision4, vision5];
 
 const Vision = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  // imagePosition: 0 = 상단, 50 = 중앙, 100 = 하단. 각 섹션마다 0~100으로 조정하세요.
   const sections = [
-    { title: "강한 대한민국", description: "독창적인 기획력과 머물게 하는 콘텐츠로 경험을 설계하는 브랜드 공간 솔루션" },
-    { title: "민주주의", description: "시민의 권리와 자유를 보장하는 민주주의 실현" },
-    { title: "경제 발전", description: "지속 가능한 경제 성장과 일자리 창출" },
-    { title: "사회 통합", description: "모든 시민이 함께하는 포용적 사회" },
-    { title: "미래 비전", description: "다음 세대를 위한 지속 가능한 미래 설계" },
+    { title: "공정한 시장경제", description: "반칙과 특권이 없는 투명한 시장 질서를 확립하여 기업의 창의성과 역동성이 살아나는 경제 생태계 조성", imagePosition: 20 },
+    { title: "공평한 사회", description: "법 앞의 평등을 실현하고 시민 개개인의 기본권과 자유가 온전히 보장되는 성숙한 민주주의 구현", imagePosition: 30 },
+    { title: "실질적 재벌개혁", description: "지배구조의 투명성을 높여 시장의 공정성을 회복하고 지속 가능한 성장과 양질의 일자리 창출", imagePosition: 25 },
+    { title: "포용적 경제민주화", description: "부의 편중을 막고 성장의 과실을 모든 시민이 나누는 상생의 포용적 공동체 구축", imagePosition: 30 },
+    { title: "지속 가능한 미래 비전", description: "기후 위기 대응과 신성장 동력 확보를 통해 다음 세대를 위한 혁신적인 미래 설계", imagePosition: 50 },
   ];
 
   useEffect(() => {
@@ -26,6 +36,24 @@ const Vision = () => {
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 자동 스크롤
+  useEffect(() => {
+    const container = document.getElementById("vision-scroll-container");
+    if (!container) return;
+
+    const autoScroll = () => {
+      const nextIndex = (currentIndex + 1) % sections.length;
+      setCurrentIndex(nextIndex);
+      container.scrollTo({
+        left: nextIndex * container.clientWidth,
+        behavior: "smooth",
+      });
+    };
+
+    const timer = setInterval(autoScroll, AUTO_SCROLL_INTERVAL);
+    return () => clearInterval(timer);
+  }, [currentIndex, sections.length]);
 
   return (
     <div className="h-screen bg-black flex flex-col overflow-hidden">
@@ -78,9 +106,12 @@ const Vision = () => {
                   transition={{ duration: 0.8, delay: 0.3 }}
                   className="w-full max-w-2xl mb-6"
                 >
-                  <div className="w-full h-48 md:h-64 lg:h-80 bg-gray-800 flex items-center justify-center">
-                    <p className="text-gray-500 text-sm">이미지 영역</p>
-                  </div>
+                  <img
+                    src={visionImages[index]}
+                    alt={section.title}
+                    className="w-full h-48 md:h-64 lg:h-80 object-cover"
+                    style={{ objectPosition: `center ${section.imagePosition ?? 50}%` }}
+                  />
                 </motion.div>
 
                 {/* Description Text - Centered, multi-line */}
@@ -92,7 +123,7 @@ const Vision = () => {
                   className="text-center mb-6"
                 >
                   <p className="text-white text-base md:text-lg leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
-                    {section.description.split(' ').join(' / ')}
+                    {section.description}
                   </p>
                 </motion.div>
               </div>
