@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navigation from "@/components/Navigation";
-import vision1 from "@/assets/vision1.jpg";
-import vision2 from "@/assets/vision2.jpg";
-import vision3 from "@/assets/vision3.jpg";
-import vision4 from "@/assets/vision4.jpg";
-import vision5 from "@/assets/vision5.jpg";
-
 const AUTO_SCROLL_INTERVAL = 5000; // 5초마다 자동 넘김
 
-const visionImages = [vision1, vision2, vision3, vision4, vision5];
+// public/images/ 경로 사용 (빌드 시 assets 미존재해도 배포 성공)
+const visionImages = [
+  "/images/vision1.jpg",
+  "/images/vision2.jpg",
+  "/images/vision3.jpg",
+  "/images/vision4.jpg",
+  "/images/vision5.jpg",
+];
 
 const Vision = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

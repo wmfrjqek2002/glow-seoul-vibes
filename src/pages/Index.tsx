@@ -5,7 +5,9 @@ import FooterSection from "@/components/FooterSection";
 import EducationCareerSection from "@/components/EducationCareerSection";
 import HistorySection from "@/components/HistorySection";
 import NavigationMenuSection from "@/components/NavigationMenuSection";
-import backgroundImg from "@/assets/background.jpg";
+
+// public/images/ 경로 사용 (빌드 시 assets 미존재해도 배포 성공)
+const backgroundImg = "/images/background.jpg";
 
 const Index = () => {
   const location = useLocation();
