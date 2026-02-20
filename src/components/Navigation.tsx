@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { Instagram, Facebook, Youtube } from "lucide-react";
 
 const aboutSubmenus = [
   { label: "프로필", path: "/#education-career" },
@@ -25,7 +26,6 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -42,8 +42,8 @@ const Navigation = () => {
         scrolled ? "bg-black/90 backdrop-blur-md" : "bg-black"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-center px-6 md:px-12 py-6">
-        <div className="flex items-center gap-8 md:gap-12">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-6">
+        <div className="flex items-center gap-8 md:gap-12 flex-1 justify-center">
           {navItems.map((item) => {
             const hasSubmenus = "submenus" in item && item.submenus?.length;
             const isActive = hasSubmenus
@@ -60,10 +60,6 @@ const Navigation = () => {
                 >
                   <Link
                     to={item.path}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate("/?reset=intro", { replace: false });
-                    }}
                     className={`text-xs tracking-[0.15em] transition-colors ${
                       isActive
                         ? "text-foreground"
@@ -117,6 +113,35 @@ const Navigation = () => {
               </Link>
             );
           })}
+        </div>
+        <div className="flex items-center gap-6 md:gap-8">
+          <a
+            href="https://www.instagram.com/hopeparkyongjin/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Instagram"
+          >
+            <Instagram size={24} strokeWidth={1.5} />
+          </a>
+          <a
+            href="https://www.facebook.com/yongjin.bag"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Facebook"
+          >
+            <Facebook size={24} strokeWidth={1.5} />
+          </a>
+          <a
+            href="https://www.youtube.com/@hopeparkyongjin"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="YouTube"
+          >
+            <Youtube size={24} strokeWidth={1.5} />
+          </a>
         </div>
       </div>
     </motion.nav>
